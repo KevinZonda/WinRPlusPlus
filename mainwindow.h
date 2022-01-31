@@ -22,6 +22,7 @@ private slots:
 private:
     QComboBox *cmbCommand;
     QPushButton *btnRun;
+    QPushButton *btnExit;
     QLabel *lblDescription;
 };
 
