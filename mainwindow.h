@@ -5,8 +5,8 @@
 
 QT_BEGIN_NAMESPACE
 class QLabel;
-class QLineEdit;
 class QPushButton;
+class QComboBox;
 QT_END_NAMESPACE
 
 class MainWindow : public QDialog
@@ -20,7 +20,7 @@ private slots:
     void runOperation();
 
 private:
-    QLineEdit *txtCommand;
+    QComboBox *cmbCommand;
     QPushButton *btnRun;
     QLabel *lblDescription;
 };

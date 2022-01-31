@@ -4,16 +4,17 @@
 
 MainWindow::MainWindow(QWidget *parent)
     : QDialog(parent),
-      txtCommand(new QLineEdit("")),
+      cmbCommand(new QComboBox()),
       btnRun(new QPushButton(tr("Run"))),
       lblDescription(new QLabel(tr("Type the name of a program, folder, document, or Internet resource, and Linux will open it for you.")))
 {
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
     QLabel *lblCmd = new QLabel(tr("&Command:"));
-    lblCmd->setBuddy(txtCommand);
+    lblCmd->setBuddy(cmbCommand);
 
     lblDescription->setWordWrap(true);
+    cmbCommand->setEditable(true);
 
     btnRun->setDefault(true);
     QPushButton *quitButton = new QPushButton(tr("Quit"));
@@ -29,17 +30,17 @@ MainWindow::MainWindow(QWidget *parent)
     QGridLayout *mainLayout = new QGridLayout(this);
 
     mainLayout->addWidget(lblCmd, 1, 0);
-    mainLayout->addWidget(txtCommand, 1, 1);
+    mainLayout->addWidget(cmbCommand, 1, 1);
     mainLayout->addWidget(lblDescription, 0, 0, 1, 2);
     mainLayout->addWidget(buttonBox, 3, 0, 1, 2);
 
     setWindowTitle(QGuiApplication::applicationDisplayName());
-    txtCommand->setFocus();
+    cmbCommand->setFocus();
 }
 
 void MainWindow::runOperation()
 {
-    auto x = txtCommand->text();
+    auto x = cmbCommand->currentText();
     QMessageBox::information(
                 this,
                 tr("WinR++"),
