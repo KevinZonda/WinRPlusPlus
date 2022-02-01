@@ -3,14 +3,15 @@
 
 #include <QVector>
 
-class user
+class User
 {
 private:
     QVector<QString> *historyList;
     QString* home;
 public:
-    user();
+    User();
     void addHistoryItem(QString);
+    void saveHistoryItem();
 
     const QString historyFilePath = ".local/share/WinR/history.txt";
 };

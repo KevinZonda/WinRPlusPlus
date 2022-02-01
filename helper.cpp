@@ -29,7 +29,7 @@ QString readAllText(QString path)
 {
     QFile f(path);
     if (!f.open(QFile::ReadOnly | QFile::Text))
-        return NULL;
+        return NULL; // FIXME: maybe need create!
     QTextStream in(&f);
     return in.readAll();
 }

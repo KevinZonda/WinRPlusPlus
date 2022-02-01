@@ -7,7 +7,8 @@ MainWindow::MainWindow(QWidget *parent)
       cmbCommand(new QComboBox()),
       btnRun(new QPushButton(tr("Run"))),
       btnExit(new QPushButton("Exit")),
-      lblDescription(new QLabel(tr("Type the name of a program, folder, document, or Internet resource, and Linux will open it for you.")))
+      lblDescription(new QLabel(tr("Type the name of a program, folder, document, or Internet resource, and Linux will open it for you."))),
+      user(new User())
 {
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
@@ -43,8 +44,11 @@ MainWindow::MainWindow(QWidget *parent)
 
 void MainWindow::runOperation()
 {
+    auto cmd = cmbCommand->currentText();
+    user->addHistoryItem(cmd);
     QMessageBox::information(
                 this,
                 tr("WinR++"),
-                cmbCommand->currentText());
+                cmd);
+
 }

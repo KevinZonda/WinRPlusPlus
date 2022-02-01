@@ -2,7 +2,7 @@
 #include "helper.cpp"
 #include "conv.cpp"
 
-user::user()
+User::User()
     : historyList(new QVector<QString>())
 {
     auto dir = getLinuxHomeDir();
@@ -22,7 +22,13 @@ user::user()
     }
 }
 
-void user::addHistoryItem(QString cmd)
+void User::addHistoryItem(QString cmd)
 {
     historyList->append(cmd);
+    saveHistoryItem();
+}
+
+void User::saveHistoryItem()
+{
+    // TODO: implement
 }

@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QDialog>
+#include <user.h>
 
 QT_BEGIN_NAMESPACE
 class QLabel;
@@ -24,6 +25,7 @@ private:
     QPushButton *btnRun;
     QPushButton *btnExit;
     QLabel *lblDescription;
+    User *user;
 };
 
 #endif
