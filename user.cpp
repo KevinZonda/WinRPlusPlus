@@ -15,4 +15,14 @@ user::user()
     }
     home = convQStrFromChars(dir);
     auto hist = readAllText(combinePath(*home, historyFilePath));
+    auto hists = hist.split("\n");
+    foreach (auto item, hists)
+    {
+        historyList->append(item);
+    }
+}
+
+void user::addHistoryItem(QString cmd)
+{
+    historyList->append(cmd);
 }
