@@ -14,4 +14,5 @@ user::user()
         //       crash? or?
     }
     home = convQStrFromChars(dir);
+    auto hist = readAllText(combinePath(*home, historyFilePath));
 }

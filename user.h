@@ -11,7 +11,7 @@ private:
 public:
     user();
 
-    const QString historyFile = ".local/share/WinR/history.txt";
+    const QString historyFilePath = ".local/share/WinR/history.txt";
 };
 
 #endif // USER_H

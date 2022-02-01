@@ -3,6 +3,9 @@
 #include <unistd.h>
 #include <pwd.h>
 #include <sys/types.h>
+#include <QString>
+#include <QFile>
+#include <QTextStream>
 
 // Get Linux Home Direction
 // Attention: this function is not threat-safe
@@ -20,4 +23,18 @@ char* getLinuxHomeDir()
         return NULL;
 
     return pw->pw_dir;
+}
+
+QString readAllText(QString path)
+{
+    QFile f(path);
+    if (!f.open(QFile::ReadOnly | QFile::Text))
+        return NULL;
+    QTextStream in(&f);
+    return in.readAll();
+}
+
+QString combinePath(QString path1, QString path2)
+{
+    return path1 + path2;
 }
