@@ -46,23 +46,30 @@ MainWindow::MainWindow(QWidget *parent)
     while (hs.hasNext()){
         cmbCommand->addItem(hs.next());
     }
+    cmbCommand->setCurrentText("");
 }
 
 void MainWindow::runOperation()
 {
-    auto cmd = cmbCommand->currentText();
-    user->addHistoryItem(cmd);
-    //cmbCommand->addItem(cmd);
-    cmbCommand->insertItem(0, cmd);
-    /*QMessageBox::information(
-                this,
-                tr("WinR++"),
-                cmd);*/
-   QProcess::execute(cmd);
-
+    auto cmd = cmbCommand->currentText().trimmed();
+    if (cmd.isEmpty())
+    {
+        QMessageBox::information(
+                    this,
+                    tr("Information"),
+                    "Please enter your command.");
+        return;
+    }
+    QString prev = user->historyList->first();
+    if (prev != cmd) {
+        user->addHistoryItem(cmd);
+        cmbCommand->insertItem(0, cmd);
+    }
+    QProcess::execute(cmd);
 }
 
 void MainWindow::exitOperation()
 {
     this->close();
+    exit(0);
 }
