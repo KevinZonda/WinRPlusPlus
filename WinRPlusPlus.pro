@@ -17,7 +17,8 @@ SOURCES += \
 
 HEADERS += \
     mainwindow.h \
-    user.h
+    user.h \
+    wconst.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

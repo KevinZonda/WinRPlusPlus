@@ -31,10 +31,16 @@ QString readAllText(QString path)
     if (!f.open(QFile::ReadOnly | QFile::Text))
         return NULL; // FIXME: maybe need create!
     QTextStream in(&f);
-    return in.readAll();
+    auto txt = in.readAll();
+    f.close();
+    return txt;
+}
+
+char getPathSep() {
+    return '/'; // TODO:
 }
 
 QString combinePath(QString path1, QString path2)
 {
-    return path1 + path2;
+    return path1 + getPathSep() + path2;
 }

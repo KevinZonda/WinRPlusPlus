@@ -1,6 +1,8 @@
 #include "user.h"
 #include "helper.cpp"
 #include "conv.cpp"
+#include "wconst.h"
+#include <QStringBuilder>
 
 User::User()
     : historyList(new QVector<QString>())
@@ -24,11 +26,20 @@ User::User()
 
 void User::addHistoryItem(QString cmd)
 {
+    if (historyList->count() >= MAX_HISTORY_LEN) {
+        historyList->removeLast();
+    }
+
     historyList->append(cmd);
     saveHistoryItem();
 }
 
 void User::saveHistoryItem()
 {
-    // TODO: implement
+    QStringList ss;
+    QVectorIterator<QString> hs(*historyList);
+
+    while (hs.hasNext()){
+        ss << hs.next();
+    }
 }
