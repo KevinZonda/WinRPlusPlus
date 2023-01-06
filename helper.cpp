@@ -9,6 +9,7 @@
 #include <QTextStream>
 
 #include <panic.h>
+#include <caller.h>
 
 // Get Linux Home Direction
 // Attention: this function is not threat-safe
@@ -41,8 +42,7 @@ QString readAllText(QString path)
 
 void ensureDir(QString path)
 {
-    auto cmd = "mkdir -p " + path;
-    system(cmd.toStdString().c_str());
+    runWithSystem("mkdir -p " + path);
 }
 
 void writeAllText(QString path, QString content)

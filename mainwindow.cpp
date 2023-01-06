@@ -66,6 +66,7 @@ void MainWindow::runOperation()
         user->addHistoryItem(cmd);
         cmbCommand->insertItem(0, cmd);
     }
+    qDebug() << "EXEC " << cmd;
     QProcess::execute(cmd);
 }
 
