@@ -16,7 +16,7 @@ User::User()
         //       crash? or?
     }
     home = convQStrFromChars(dir);
-    auto hist = readAllText(combinePath(*home, historyFilePath));
+    auto hist = readAllText(combinePath(*home, HISTORY_PATH));
     auto hists = hist.split("\n");
     foreach (auto item, hists)
     {
@@ -44,4 +44,5 @@ void User::saveHistoryItem()
     while (hs.hasNext()){
         ss << hs.next();
     }
+    writeAllText(combinePath(*home, HISTORY_PATH), ss.join("\n"));
 }

@@ -7,6 +7,8 @@
 #include <QFile>
 #include <QTextStream>
 
+#include <panic.h>
+
 // Get Linux Home Direction
 // Attention: this function is not threat-safe
 // Refer: https://stackoverflow.com/questions/2910377/get-home-directory-in-linux
@@ -38,11 +40,13 @@ QString readAllText(QString path)
 
 void writeAllText(QString path, QString content)
 {
+    panic(path);
     QFile f(path);
     if (!f.open(QIODeviceBase::WriteOnly | QFile::Text))
         return;
     QTextStream out(&f);
     out << content;
+    out.flush();
     return;
 
 }
@@ -53,5 +57,8 @@ char getPathSep() {
 
 QString combinePath(QString path1, QString path2)
 {
+    if (path1.endsWith(getPathSep())) {
+        return path1 + path2;
+    }
     return path1 + getPathSep() + path2;
 }

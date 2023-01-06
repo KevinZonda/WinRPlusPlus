@@ -13,10 +13,12 @@ SOURCES += \
     helper.cpp \
     main.cpp \
     mainwindow.cpp \
+    panic.cpp \
     user.cpp
 
 HEADERS += \
     mainwindow.h \
+    panic.h \
     user.h \
     wconst.h
 

@@ -4,3 +4,5 @@
 #endif // WCONST_H
 
 const int MAX_HISTORY_LEN = 10;
+
+const char* HISTORY_PATH = ".local/share/WinR/history.txt";
