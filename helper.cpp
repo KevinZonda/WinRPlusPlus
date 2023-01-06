@@ -47,11 +47,14 @@ void writeAllText(QString path, QString content)
     out << content;
     out.flush();
     return;
-
 }
 
 char getPathSep() {
-    return '/'; // TODO:
+#ifdef WIN32
+    return '\\';
+#else
+    return '/';
+#endif
 }
 
 QString combinePath(QString path1, QString path2)
