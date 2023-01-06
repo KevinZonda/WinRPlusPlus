@@ -12,6 +12,7 @@ public:
     void addHistoryItem(QString);
     void saveHistoryItem();
     QStringList *historyList;
+    bool isHistoryUsed;
 };
 
 #endif // USER_H

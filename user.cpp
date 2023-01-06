@@ -8,12 +8,13 @@ User::User()
     : historyList(new QStringList())
 {
     auto dir = getLinuxHomeDir();
+    this->isHistoryUsed = true;
 
     if (dir == NULL)
     {
-        // TODO: when cannot found Linux Home Directory
-        //       what to do?
-        //       crash? or?
+        panic("Error", "Cannot get $HOME, history list will not be in use!");
+        this->isHistoryUsed = false;
+        return;
     }
     home = convQStrFromChars(dir);
     ensureDir(combinePath(*home, HISTORY_DIR));
@@ -29,6 +30,8 @@ User::User()
 
 void User::addHistoryItem(QString cmd)
 {
+    if (!this->isHistoryUsed) return;
+
     if (historyList->count() >= MAX_HISTORY_LEN) {
         historyList->removeLast();
     }
@@ -38,5 +41,7 @@ void User::addHistoryItem(QString cmd)
 
 void User::saveHistoryItem()
 {
+    if (!this->isHistoryUsed) return;
+
     writeAllText(combinePath(*home, HISTORY_PATH), historyList->join("\n"));
 }
