@@ -6,10 +6,10 @@
 MainWindow::MainWindow(QWidget *parent)
     : QDialog(parent),
       cmbCommand(new QComboBox()),
+      user(new User()),
       btnRun(new QPushButton(tr("Run"))),
       btnExit(new QPushButton("Exit")),
-      lblDescription(new QLabel(tr("Type the name of a program, folder, document, or Internet resource, and Linux will open it for you."))),
-      user(new User())
+      lblDescription(new QLabel(tr("Type the name of a program, folder, document, or Internet resource, and Linux will open it for you.")))
 {
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
@@ -26,9 +26,8 @@ MainWindow::MainWindow(QWidget *parent)
     buttonBox->addButton(btnExit, QDialogButtonBox::RejectRole);
 
     // Link Event
-    connect(btnRun, &QPushButton::clicked,
-            this, &MainWindow::runOperation);
-    connect(btnExit, &QPushButton::clicked, this, &MainWindow::close);
+    connect(btnRun , &QPushButton::clicked, this, &MainWindow::runOperation);
+    connect(btnExit, &QPushButton::clicked, this, &MainWindow::exitOperation);
 
     // Set GridLayout
     QGridLayout *mainLayout = new QGridLayout(this);
@@ -53,11 +52,17 @@ void MainWindow::runOperation()
 {
     auto cmd = cmbCommand->currentText();
     user->addHistoryItem(cmd);
-    cmbCommand->addItem(cmd);
+    //cmbCommand->addItem(cmd);
+    cmbCommand->insertItem(0, cmd);
     /*QMessageBox::information(
                 this,
                 tr("WinR++"),
                 cmd);*/
    QProcess::execute(cmd);
 
+}
+
+void MainWindow::exitOperation()
+{
+    this->close();
 }

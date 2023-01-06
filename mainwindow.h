@@ -21,6 +21,7 @@ public:
 
 private slots:
     void runOperation();
+    void exitOperation();
 
 private:
     QPushButton *btnRun;

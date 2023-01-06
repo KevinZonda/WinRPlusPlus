@@ -31,8 +31,7 @@ void User::addHistoryItem(QString cmd)
     if (historyList->count() >= MAX_HISTORY_LEN) {
         historyList->removeLast();
     }
-
-    historyList->append(cmd);
+    historyList->push_front(cmd);
     saveHistoryItem();
 }
 

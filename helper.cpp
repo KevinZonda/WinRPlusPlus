@@ -40,7 +40,6 @@ QString readAllText(QString path)
 
 void writeAllText(QString path, QString content)
 {
-    panic(path);
     QFile f(path);
     if (!f.open(QIODeviceBase::WriteOnly | QFile::Text))
         return;
