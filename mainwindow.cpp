@@ -54,9 +54,10 @@ void MainWindow::runOperation()
     auto cmd = cmbCommand->currentText();
     user->addHistoryItem(cmd);
     cmbCommand->addItem(cmd);
-    QMessageBox::information(
+    /*QMessageBox::information(
                 this,
                 tr("WinR++"),
-                cmd);
+                cmd);*/
+   QProcess::execute(cmd);
 
 }

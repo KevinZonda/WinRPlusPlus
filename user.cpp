@@ -5,7 +5,7 @@
 #include <QStringBuilder>
 
 User::User()
-    : historyList(new QVector<QString>())
+    : historyList(new QStringList())
 {
     auto dir = getLinuxHomeDir();
 
@@ -22,7 +22,7 @@ User::User()
     {
         auto trimmed = item.trimmed();
         if (trimmed.isEmpty()) continue;
-        historyList->append(item);
+        (*historyList) << trimmed;
     }
 }
 
@@ -38,11 +38,5 @@ void User::addHistoryItem(QString cmd)
 
 void User::saveHistoryItem()
 {
-    QStringList ss;
-    QVectorIterator<QString> hs(*historyList);
-
-    while (hs.hasNext()){
-        ss << hs.next();
-    }
-    writeAllText(combinePath(*home, HISTORY_PATH), ss.join("\n"));
+    writeAllText(combinePath(*home, HISTORY_PATH), historyList->join("\n"));
 }

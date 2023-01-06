@@ -11,7 +11,7 @@ public:
     User();
     void addHistoryItem(QString);
     void saveHistoryItem();
-    QVector<QString> *historyList;
+    QStringList *historyList;
 };
 
 #endif // USER_H
