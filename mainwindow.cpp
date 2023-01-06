@@ -1,6 +1,7 @@
 #include <QtWidgets>
 
 #include "mainwindow.h"
+#include "panic.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QDialog(parent),
@@ -65,8 +66,23 @@ void MainWindow::runOperation()
         user->addHistoryItem(cmd);
         cmbCommand->insertItem(0, cmd);
     }
-    qDebug() << "EXEC " << cmd;
-    QProcess::execute(cmd);
+    QProcess process;
+
+    process.setEnvironment(QProcess::systemEnvironment());
+    int ret = process.startDetached("bash", QStringList() << QString("-c") << cmd);
+    if (ret == -2)
+    {
+        panic("Error", "Process cannot be started");
+    }
+    else if (ret == -1)
+    {
+        panic("Error", "Process crashes");
+    }
+    else if (ret < 0)
+    {
+        panic("Error", "Unknown Error: " + QString::number(ret));
+    }
+
 }
 
 void MainWindow::exitOperation()
