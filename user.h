@@ -6,12 +6,12 @@
 class User
 {
 private:
-    QVector<QString> *historyList;
     QString* home;
 public:
     User();
     void addHistoryItem(QString);
     void saveHistoryItem();
+    QVector<QString> *historyList;
 
     const QString historyFilePath = ".local/share/WinR/history.txt";
 };

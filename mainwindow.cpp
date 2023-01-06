@@ -40,12 +40,19 @@ MainWindow::MainWindow(QWidget *parent)
 
     setWindowTitle(QGuiApplication::applicationDisplayName());
     cmbCommand->setFocus();
+
+    // Load History List
+    QVectorIterator<QString> hs(*user->historyList);
+    while (hs.hasNext()){
+        cmbCommand->addItem(hs.next());
+    }
 }
 
 void MainWindow::runOperation()
 {
     auto cmd = cmbCommand->currentText();
     user->addHistoryItem(cmd);
+    cmbCommand->addItem(cmd);
     QMessageBox::information(
                 this,
                 tr("WinR++"),

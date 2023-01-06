@@ -20,6 +20,8 @@ User::User()
     auto hists = hist.split("\n");
     foreach (auto item, hists)
     {
+        auto trimmed = item.trimmed();
+        if (trimmed.isEmpty()) continue;
         historyList->append(item);
     }
 }

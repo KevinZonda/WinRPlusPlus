@@ -36,6 +36,17 @@ QString readAllText(QString path)
     return txt;
 }
 
+void writeAllText(QString path, QString content)
+{
+    QFile f(path);
+    if (!f.open(QIODeviceBase::WriteOnly | QFile::Text))
+        return;
+    QTextStream out(&f);
+    out << content;
+    return;
+
+}
+
 char getPathSep() {
     return '/'; // TODO:
 }

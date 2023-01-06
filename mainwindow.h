@@ -16,16 +16,16 @@ class MainWindow : public QDialog
 
 public:
     explicit MainWindow(QWidget *parent = nullptr);
+    QComboBox *cmbCommand;
+    User *user;
 
 private slots:
     void runOperation();
 
 private:
-    QComboBox *cmbCommand;
     QPushButton *btnRun;
     QPushButton *btnExit;
     QLabel *lblDescription;
-    User *user;
 };
 
 #endif
