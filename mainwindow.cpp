@@ -1,7 +1,6 @@
 #include <QtWidgets>
 
 #include "mainwindow.h"
-#include "panic.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QDialog(parent),
