@@ -1,5 +1,6 @@
 #include <QtWidgets>
 
+#include "caller.h"
 #include "mainwindow.h"
 #include "panic.h"
 
@@ -66,10 +67,7 @@ void MainWindow::runOperation()
         user->addHistoryItem(cmd);
         cmbCommand->insertItem(0, cmd);
     }
-    QProcess process;
-
-    process.setEnvironment(QProcess::systemEnvironment());
-    int ret = process.startDetached("bash", QStringList() << QString("-c") << cmd);
+    int ret = runWithBash(cmd);
     if (ret == -2)
     {
         panic("Error", "Process cannot be started");

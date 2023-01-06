@@ -5,4 +5,6 @@
 
 void runWithSystem(QString cmd);
 
+int runWithBash(QString cmd);
+
 #endif // CALLER_H
