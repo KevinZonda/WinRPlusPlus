@@ -62,6 +62,7 @@ void MainWindow::runOperation()
     }
     QString prev = user->historyList->first();
     if (prev != cmd) {
+
         user->addHistoryItem(cmd);
         cmbCommand->insertItem(0, cmd);
     }
