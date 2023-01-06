@@ -16,6 +16,7 @@ User::User()
         //       crash? or?
     }
     home = convQStrFromChars(dir);
+    ensureDir(combinePath(*home, HISTORY_DIR));
     auto hist = readAllText(combinePath(*home, HISTORY_PATH));
     auto hists = hist.split("\n");
     foreach (auto item, hists)

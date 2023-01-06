@@ -1,3 +1,4 @@
+#include "QtCore/qdir.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -36,6 +37,12 @@ QString readAllText(QString path)
     auto txt = in.readAll();
     f.close();
     return txt;
+}
+
+void ensureDir(QString path)
+{
+    auto cmd = "mkdir -p " + path;
+    system(cmd.toStdString().c_str());
 }
 
 void writeAllText(QString path, QString content)
