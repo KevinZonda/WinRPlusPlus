@@ -3,7 +3,7 @@
 
 void panic(QString title, QString msg) {
     QMessageBox::critical(
-                    NULL,
+                    nullptr,
                     title,
                     msg
                 );
@@ -11,7 +11,7 @@ void panic(QString title, QString msg) {
 
 void panic(QString msg) {
     QMessageBox::critical(
-                    NULL,
+                    nullptr,
                     "Error",
                     msg
                 );

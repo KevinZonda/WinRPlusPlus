@@ -17,14 +17,14 @@
 char* getLinuxHomeDir()
 {
     char *homedir = getenv("HOME");
-    if (homedir != NULL)
+    if (homedir != nullptr)
         return homedir;
 
     uid_t uid = getuid();
     struct passwd *pw = getpwuid(uid);
 
-    if (pw == NULL)
-        return NULL;
+    if (pw == nullptr)
+        return nullptr;
 
     return pw->pw_dir;
 }
