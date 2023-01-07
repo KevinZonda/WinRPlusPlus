@@ -7,4 +7,6 @@ void panic(QString title, QString msg);
 
 void panic(QString msg);
 
+void info(QString msg);
+
 #endif // PANIC_H

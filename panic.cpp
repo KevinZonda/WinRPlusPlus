@@ -16,3 +16,11 @@ void panic(QString msg) {
                     msg
                 );
 }
+
+void info(QString msg) {
+    QMessageBox::information(
+                    nullptr,
+                    "Info",
+                    msg
+                );
+}

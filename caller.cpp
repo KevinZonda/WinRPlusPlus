@@ -46,8 +46,6 @@ void internalCaller(QString cmd)
     }
 }
 
-
-
 int runWithBash(QString cmd)
 {
     if (cmd.startsWith("+"))
@@ -57,5 +55,20 @@ int runWithBash(QString cmd)
     }
     QProcess process;
     process.setEnvironment(QProcess::systemEnvironment());
-    return process.startDetached(TERMINAL, QStringList() << QString("-c") << cmd);
+    int ret = process.startDetached(TERMINAL, QStringList() << QString("-c") << cmd);
+    return ret;
+}
+
+void runWithBashSync(QString cmd)
+{
+    if (cmd.startsWith("+"))
+    {
+        internalCaller(cmd);
+        return;
+    }
+    QProcess process;
+    process.setEnvironment(QProcess::systemEnvironment());
+    process.start(TERMINAL, QStringList() << QString("-c") << cmd);
+    process.waitForFinished();
+    info(process.readAll());
 }

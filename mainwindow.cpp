@@ -67,6 +67,11 @@ void MainWindow::runOperation()
         user->addHistoryItem(cmd);
         cmbCommand->insertItem(0, cmd);
     }
+    bool isRunSync = true;
+    if (isRunSync) {
+        runWithBashSync(cmd);
+        return;
+    }
     int ret = runWithBash(cmd);
     if (ret == -2)
     {

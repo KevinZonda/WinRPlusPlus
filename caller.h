@@ -7,4 +7,6 @@ void runWithSystem(QString cmd);
 
 int runWithBash(QString cmd);
 
+void runWithBashSync(QString cmd);
+
 #endif // CALLER_H
