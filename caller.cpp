@@ -26,5 +26,9 @@ int runWithBash(QString cmd)
     }
     QProcess process;
     process.setEnvironment(QProcess::systemEnvironment());
+#ifdef WIN32
+    return process.startDetached("cmd", QStringList() << QString("/c") << cmd);
+#else
     return process.startDetached("bash", QStringList() << QString("-c") << cmd);
+#endif
 }
