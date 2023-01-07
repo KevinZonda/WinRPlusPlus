@@ -70,5 +70,20 @@ void runWithBashSync(QString cmd)
     process.setEnvironment(QProcess::systemEnvironment());
     process.start(TERMINAL, QStringList() << QString("-c") << cmd);
     process.waitForFinished();
-    info(process.readAll());
+    if (!process.isReadable()) return;
+
+    auto out = process.readAll().trimmed();
+    auto err = process.readAllStandardError().trimmed();
+    QString msg = "";
+    if (!out.isEmpty()) {
+        msg += "[STDOUT]\n" + out + "\n";
+    }
+
+    if (!err.isEmpty()  ) {
+        msg += "[STDERR]\n" + err + "\n";
+    }
+
+    if (msg.isEmpty()) return;
+
+    info(msg);
 }
