@@ -72,6 +72,10 @@ void runWithBashSync(QString cmd)
     process.waitForFinished();
     if (!process.isReadable()) return;
 
+    auto messager = &info;
+    if (process.exitCode() != 0)
+        messager = &panic;
+
     auto out = process.readAll().trimmed();
     auto err = process.readAllStandardError().trimmed();
     QString msg = "";
@@ -85,5 +89,5 @@ void runWithBashSync(QString cmd)
 
     if (msg.isEmpty()) return;
 
-    info(msg);
+    (*messager)(msg);
 }
