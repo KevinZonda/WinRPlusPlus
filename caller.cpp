@@ -1,10 +1,37 @@
 #include "caller.h"
+#include "QtCore/qdebug.h"
 #include "panic.h"
 #include <QProcess>
+
+#define TERMINAL "zsh"
+
+#ifdef WIN32
+    #define TERMINAL "cmd"
+#else
+    #ifdef Q_OS_MAC
+        #define TERMINAL "zsh"
+    #else
+        #define TERMINAL "bash"
+    #endif
+#endif
 
 void runWithSystem(QString cmd)
 {
     system(cmd.toStdString().c_str());
+}
+
+QString getBashEnv() {
+    QProcess proc;
+    proc.start(TERMINAL, QStringList() << "-i");
+    proc.waitForStarted();
+    proc.write("echo $PATH\n");
+    proc.waitForBytesWritten();
+    proc.waitForReadyRead();
+
+    auto path = proc.readAll().trimmed();
+    qDebug() << path;
+    proc.close();
+    return QString(path);
 }
 
 void internalCaller(QString cmd)
@@ -14,8 +41,12 @@ void internalCaller(QString cmd)
     {
         panic(QString(getenv("PATH")));
     }
-
+    if (cmd == "e") {
+        panic(getBashEnv());
+    }
 }
+
+
 
 int runWithBash(QString cmd)
 {
@@ -26,9 +57,5 @@ int runWithBash(QString cmd)
     }
     QProcess process;
     process.setEnvironment(QProcess::systemEnvironment());
-#ifdef WIN32
-    return process.startDetached("cmd", QStringList() << QString("/c") << cmd);
-#else
-    return process.startDetached("bash", QStringList() << QString("-c") << cmd);
-#endif
+    return process.startDetached(TERMINAL, QStringList() << QString("-c") << cmd);
 }
