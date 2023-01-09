@@ -60,12 +60,14 @@ void MainDialog::onRun()
     auto proc = m_manager->createTask(command);
 
     ui->progressBar->show();
+    ui->runBtn->setEnabled(false);
 
     QEventLoop loop;
     QObject::connect(m_manager, &TaskManager::taskFinished, &loop, &QEventLoop::quit);
     loop.exec();
 
     ui->progressBar->hide();
+    ui->runBtn->setEnabled(true);
 
     QString output, temp;
 
