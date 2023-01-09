@@ -6,6 +6,7 @@ SOURCES += \
     $$PWD/maindialog.cpp
 
 HEADERS += \
+    $$PWD/config.h \
     $$PWD/maindialog.h
 
 FORMS += \

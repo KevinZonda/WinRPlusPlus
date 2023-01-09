@@ -9,6 +9,8 @@ QT_END_NAMESPACE
 
 class QSettings;
 
+class TaskManager;
+
 class MainDialog : public QDialog
 {
     Q_OBJECT
@@ -26,5 +28,7 @@ private:
     Ui::MainDialog *ui;
 
     QSettings *m_settings = nullptr;
+
+    TaskManager *m_manager = nullptr;
 };
 #endif // MAINDIALOG_H

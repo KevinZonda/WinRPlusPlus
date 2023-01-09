@@ -2,7 +2,7 @@ INCLUDEPATH += $$PWD
 DEPENDPATH += $$PWD
 
 HEADERS += \
-    $$PWD/runner.h
+    $$PWD/taskmanager.h
 
 SOURCES += \
-    $$PWD/runner.cpp
+    $$PWD/taskmanager.cpp
