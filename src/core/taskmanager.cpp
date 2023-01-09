@@ -7,7 +7,11 @@
 #ifdef Q_OS_WINDOWS
 const char *TERMINAL = "cmd";
 #else
-const char *TERMINAL = "sh";
+#ifdef Q_OS_MAC
+const char *TERMINAL = "zsh";
+#else
+const char *TERMINAL = "bash";
+#endif
 #endif
 
 TaskManager::TaskManager(QObject *parent)
