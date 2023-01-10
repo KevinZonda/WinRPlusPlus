@@ -4,6 +4,7 @@
 #include <QMap>
 #include <QObject>
 #include <QProcess>
+#include <QStringList>
 
 class TaskManager : public QObject
 {
@@ -12,7 +13,10 @@ public:
     explicit TaskManager(QObject *parent = nullptr);
     ~TaskManager() override;
 
-    QProcess *createTask(const QString &command);
+    bool initEnvironment();
+    const QProcessEnvironment &environments() const;
+
+    QProcess *createTask(const QString &program, const QStringList &arguments);
 
     bool isAllFinished() const { return !m_taskCount; }
 
@@ -28,6 +32,7 @@ private slots:
 
 private:
     size_t m_taskCount = 0;
+    QProcessEnvironment m_envs;
 };
 
 #endif // TASKMANAGER_H

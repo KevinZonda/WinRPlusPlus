@@ -19,6 +19,10 @@ int main(int argc, char *argv[])
     }
 
     MainDialog w;
+
+    if (!w.init())
+        return -1;
+
     w.show();
 
     return a.exec();

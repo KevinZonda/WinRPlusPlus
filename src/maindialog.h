@@ -19,11 +19,15 @@ public:
     MainDialog(QWidget *parent = nullptr);
     ~MainDialog();
 
+    bool init();
+
 public slots:
     void onRun();
 
 private:
     void closeEvent(QCloseEvent *) override;
+
+    void showEnvironments();
 
     Ui::MainDialog *ui;
 

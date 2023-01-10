@@ -4,15 +4,7 @@
 #include <QProcess>
 #include <QEventLoop>
 
-#ifdef Q_OS_WINDOWS
-const char *TERMINAL = "cmd";
-#else
-#ifdef Q_OS_MAC
-const char *TERMINAL = "zsh";
-#else
-const char *TERMINAL = "bash";
-#endif
-#endif
+#include "config.h"
 
 TaskManager::TaskManager(QObject *parent)
     : QObject{parent}
@@ -25,15 +17,59 @@ TaskManager::~TaskManager()
 
 }
 
-QProcess *TaskManager::createTask(const QString &command)
+bool TaskManager::initEnvironment()
 {
-    if (command.isEmpty())
+    if (!m_envs.isEmpty())
+        return true;
+
+#ifdef Q_OS_WINDOWS
+    m_envs = QProcess::systemEnvironment();
+    return true;
+#else
+    QProcess *proc = nullptr;
+    for (const auto sh : TERMINALS)
+        if (proc = this->createTask(sh, QStringList() << "-c" << "printenv"); proc)
+            break;
+
+    if (!proc)
+        return false;
+
+    QEventLoop loop;
+    QObject::connect(this, &TaskManager::taskFinished, &loop, &QEventLoop::quit);
+    loop.exec();
+
+    QString envsString;
+    QVector<QStringRef> envs;
+    if (proc->isReadable())
+    {
+        envsString = proc->readAllStandardOutput();
+        envs = envsString.splitRef('\n');
+    }
+    else
+        return true;
+
+    for (const auto &env : qAsConst(envs))
+        if (const auto envMap = env.split('='); envMap.size() == 2)
+            m_envs.insert(envMap[0].toString(), envMap[1].toString());
+
+    return true;
+#endif
+}
+
+const QProcessEnvironment &TaskManager::environments() const
+{
+    return m_envs;
+}
+
+QProcess *TaskManager::createTask(const QString &program, const QStringList &arguments)
+{
+    if (program.isEmpty())
         return nullptr;
 
     auto proc = new QProcess(this);
-    proc->setEnvironment(QProcess::systemEnvironment());
+    proc->setProcessEnvironment(m_envs);
 
-    proc->start(TERMINAL, QStringList() << "-c" << command, QProcess::ReadOnly);
+    proc->start(program, arguments, QProcess::ReadOnly);
 
     QEventLoop loop;
     QObject::connect(proc, &QProcess::started, &loop, &QEventLoop::quit);
@@ -45,8 +81,6 @@ QProcess *TaskManager::createTask(const QString &command)
         proc->deleteLater();
         return nullptr;
     }
-
-    proc->closeWriteChannel();
 
     QObject::connect(proc, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished),
                      this, &TaskManager::onTaskFinished);

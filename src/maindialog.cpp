@@ -4,9 +4,10 @@
 #include "config.h"
 #include "taskmanager.h"
 
-#include <QMessageBox>
+#include <QDebug>
 #include <QSettings>
 #include <QEventLoop>
+#include <QMessageBox>
 #include <QRegularExpressionValidator>
 
 MainDialog::MainDialog(QWidget *parent)
@@ -43,21 +44,41 @@ MainDialog::~MainDialog()
     delete ui;
 }
 
+bool MainDialog::init()
+{
+    if (!m_manager->initEnvironment())
+    {
+        QMessageBox::critical(this, tr("Oops"), tr("Failed to get system environment variables"));
+        return false;
+    }
+
+    return true;
+}
+
 void MainDialog::onRun()
 {
-    QString command = ui->commandBox->currentText().trimmed();
+    const QString c = ui->commandBox->currentText().trimmed();
 
-    if (command.isEmpty())
+    if (c.isEmpty())
         return;
 
-#ifndef Q_OS_WINDOWS
-    if (command == "+e")
-        command = "echo $PATH";
-#endif
+    if (c == "+e")
+    {
+        this->showEnvironments();
+        return;
+    }
 
-    ui->commandBox->insertItem(0, command);
+    const auto command = c.split(' ');
 
-    auto proc = m_manager->createTask(command);
+    ui->commandBox->insertItem(0, c);
+
+    auto proc = m_manager->createTask(command.front(), command.mid(1));
+
+    if (!proc)
+    {
+        QMessageBox::critical(this, tr("Oops"), tr("Unknown command: %1").arg(command.front()));
+        return;
+    }
 
     ui->progressBar->show();
     ui->runBtn->setEnabled(false);
@@ -96,4 +117,10 @@ void MainDialog::closeEvent(QCloseEvent *)
         m_settings->setValue("command", ui->commandBox->itemText(i));
     }
     m_settings->endArray();
+}
+
+void MainDialog::showEnvironments()
+{
+    QMessageBox::information(this, tr("System Environments"),
+                             m_manager->environments().toStringList().join('\n'));
 }
