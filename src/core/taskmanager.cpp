@@ -23,7 +23,7 @@ bool TaskManager::initEnvironment()
         return true;
 
 #ifdef Q_OS_WINDOWS
-    m_envs = QProcess::systemEnvironment();
+    m_envs = QProcessEnvironment::systemEnvironment();
     return true;
 #else
     QProcess *proc = nullptr;
