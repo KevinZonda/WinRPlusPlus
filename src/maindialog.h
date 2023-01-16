@@ -10,6 +10,7 @@ QT_END_NAMESPACE
 class QSettings;
 
 class TaskManager;
+class HistoryModel;
 
 class MainDialog : public QDialog
 {
@@ -33,6 +34,7 @@ private:
 
     QSettings *m_settings = nullptr;
 
+    HistoryModel *m_model = nullptr;
     TaskManager *m_manager = nullptr;
 };
 #endif // MAINDIALOG_H

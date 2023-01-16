@@ -1,13 +1,13 @@
 #include "maindialog.h"
 #include "ui_maindialog.h"
 
-#include "config.h"
 #include "taskmanager.h"
+#include "historymodel.h"
 
-#include <QDebug>
 #include <QSettings>
 #include <QEventLoop>
 #include <QMessageBox>
+#include <QScopeGuard>
 #include <QRegularExpressionValidator>
 
 MainDialog::MainDialog(QWidget *parent)
@@ -25,17 +25,11 @@ MainDialog::MainDialog(QWidget *parent)
     m_settings = new QSettings(QSettings::IniFormat, QSettings::Scope::UserScope, "WinRPlusPlus");
     m_settings->setParent(this);
 
-    const auto size = m_settings->beginReadArray("history");
-    for (int i = 0; i < size; ++i)
-    {
-        if (const auto c = m_settings->value("command").toString(); !c.isEmpty())
-        {
-            m_settings->setArrayIndex(i);
-            ui->commandBox->addItem(c);
-        }
-    }
-    m_settings->endArray();
+    m_model = new HistoryModel(m_settings, this);
+    m_model->load();
 
+    ui->commandBox->setModel(m_model);
+    ui->commandBox->setInsertPolicy(QComboBox::NoInsert);
     ui->commandBox->setValidator(new QRegularExpressionValidator(QRegularExpression("\\S.*"), this));
 }
 
@@ -57,10 +51,10 @@ bool MainDialog::init()
 
 void MainDialog::onRun()
 {
-    const QString c = ui->commandBox->currentText().trimmed();
+    ui->runBtn->setEnabled(false);
+    QScopeGuard guard([this] { ui->runBtn->setEnabled(true); });
 
-    if (c.isEmpty())
-        return;
+    const QString c = ui->commandBox->currentText().trimmed();
 
     if (c == "+e")
     {
@@ -77,17 +71,15 @@ void MainDialog::onRun()
         return;
     }
 
-    ui->commandBox->insertItem(0, c);
+    m_model->addHistory(c);
 
     ui->progressBar->show();
-    ui->runBtn->setEnabled(false);
 
     QEventLoop loop;
     QObject::connect(m_manager, &TaskManager::taskFinished, &loop, &QEventLoop::quit);
     loop.exec();
 
     ui->progressBar->hide();
-    ui->runBtn->setEnabled(true);
 
     QString output, temp;
 
@@ -105,15 +97,7 @@ void MainDialog::onRun()
 void MainDialog::closeEvent(QCloseEvent *)
 {
     // save history
-    const auto size = qMax(ui->commandBox->count(), MAX_HISTORY_COUNT);
-
-    m_settings->beginWriteArray("history");
-    for (int i = 0; i < size; ++i)
-    {
-        m_settings->setArrayIndex(i);
-        m_settings->setValue("command", ui->commandBox->itemText(i));
-    }
-    m_settings->endArray();
+    m_model->save();
 }
 
 void MainDialog::showEnvironments()
