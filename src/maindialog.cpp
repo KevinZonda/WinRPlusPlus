@@ -69,9 +69,6 @@ void MainDialog::onRun()
     }
 
     const auto command = c.split(' ');
-
-    ui->commandBox->insertItem(0, c);
-
     auto proc = m_manager->createTask(command.front(), command.mid(1));
 
     if (!proc)
@@ -79,6 +76,8 @@ void MainDialog::onRun()
         QMessageBox::critical(this, tr("Oops"), tr("Unknown command: %1").arg(command.front()));
         return;
     }
+
+    ui->commandBox->insertItem(0, c);
 
     ui->progressBar->show();
     ui->runBtn->setEnabled(false);
@@ -92,14 +91,12 @@ void MainDialog::onRun()
 
     QString output, temp;
 
-    proc->setReadChannel(QProcess::StandardOutput);
-    temp = proc->readAll().trimmed();
-    if (proc->isReadable() && !temp.isEmpty())
+    temp = proc->readAllStandardOutput().trimmed();
+    if (!temp.isEmpty())
         output.append("[STDOUT]\n").append(temp).append('\n');
 
-    proc->setReadChannel(QProcess::StandardError);
-    temp = proc->readAll().trimmed();
-    if (proc->isReadable() && !temp.isEmpty())
+    temp = proc->readAllStandardError().trimmed();
+    if (!temp.isEmpty())
         output.append("[STDERR]\n").append(proc->readAll().trimmed()).append('\n');
 
     QMessageBox::information(this, tr("Task Finished"), output);
