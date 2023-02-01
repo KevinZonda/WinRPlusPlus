@@ -39,18 +39,18 @@ bool TaskManager::initEnvironment()
     loop.exec();
 
     QString envsString;
-    QVector<QStringRef> envs;
+    QVector<QString> envs;
     if (proc->isReadable())
     {
         envsString = proc->readAllStandardOutput();
-        envs = envsString.splitRef('\n');
+        envs = envsString.split('\n');
     }
     else
         return true;
 
     for (const auto &env : qAsConst(envs))
         if (const auto envMap = env.split('='); envMap.size() == 2)
-            m_envs.insert(envMap[0].toString(), envMap[1].toString());
+            m_envs.insert(envMap[0], envMap[1]);
 
     return true;
 #endif
